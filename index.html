@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="keyboard.js"></script>
+        <script src="draw.js"></script>
+    </head>
+    <body>
+        <script>
+            const keyboard = new window.Keyboard();
+            const draw = new window.KeyDraw();
+            draw.addWord(keyboard, 'Alex', '#9532a8');
+            draw.addWord(keyboard, 'Loves', '#e84f4f');
+            draw.addWord(keyboard, 'Samantha', '#65bcd4');
+            draw.draw();
+            document.body.appendChild(draw.canvas);
+        </script>
+    </body>
+</html>

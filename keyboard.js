@@ -66,6 +66,13 @@
             this.width = width;
             this.height = KEY_HEIGHT;
         }
+
+        center() {
+            return {
+                x: this.x + this.width / 2,
+                y: this.y + this.height / 2,
+            };
+        }
     }
 
     class Keyboard {
@@ -80,6 +87,12 @@
                 });
                 this.keys.push(new KeyboardKey(letter, info[1], info[2], info[3]));
             });
+        }
+
+        keyForLetter(letter) {
+            return this.keys.filter((k) => {
+                return k.letter === letter.toLowerCase();
+            })[0] || null;
         }
     }
 
