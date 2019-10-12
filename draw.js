@@ -4,6 +4,12 @@
     const HEIGHT = 95;
     const SCALE = 3;
 
+    const THICKNESS = 5;
+    const ALPHA = 0.75;
+
+    const CORNER_CUTS = 5;
+    const CORNER_SIZE = 0.03;
+
     class KeyDraw {
         constructor() {
             this.canvas = document.createElement('canvas');
@@ -15,7 +21,7 @@
         }
 
         addWord(keyboard, word, color) {
-            const path = [];
+            let path = [];
             word.split('').forEach((letter) => {
                 const key = keyboard.keyForLetter(letter);
                 if (!key) {
@@ -30,6 +36,9 @@
                 path.push(path[0]);
             }
             if (path.length > 0) {
+                for (let i = 0; i < CORNER_CUTS; ++i) {
+                    path = cornerCut(path);
+                }
                 this.paths.push(path);
                 this.colors.push(color);
             }
@@ -42,7 +51,8 @@
             this.paths.forEach((path, i) => {
                 const color = this.colors[i];
                 ctx.strokeStyle = color;
-                ctx.lineWidth = SCALE * 3;
+                ctx.globalAlpha = ALPHA;
+                ctx.lineWidth = SCALE * THICKNESS;
                 ctx.lineJoin = 'round';
                 ctx.lineCap = 'round';
                 ctx.beginPath();
@@ -53,6 +63,26 @@
                 ctx.stroke();
             });
         }
+    }
+
+    function cornerCut(path) {
+        if (path.length <= 2) {
+            return path;
+        }
+        const newPath = [path[0]];
+        for (let i = 1; i < path.length - 1; ++i) {
+            newPath.push(cutBetween(path[i - 1], path[i]));
+            newPath.push(cutBetween(path[i + 1], path[i]));
+        }
+        newPath.push(path[path.length - 1]);
+        return newPath;
+    }
+
+    function cutBetween(p1, p2) {
+        return {
+            x: p1.x * CORNER_SIZE + p2.x * (1 - CORNER_SIZE),
+            y: p1.y * CORNER_SIZE + p2.y * (1 - CORNER_SIZE),
+        };
     }
 
     window.KeyDraw = KeyDraw;
