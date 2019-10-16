@@ -8,7 +8,7 @@
     const ALPHA = 0.75;
 
     const CORNER_CUTS = 5;
-    const CORNER_SIZE = 0.03;
+    const CORNER_SIZE = 0.25;
 
     class KeyDraw {
         constructor() {
