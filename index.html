@@ -3,16 +3,72 @@
     <head>
         <script src="keyboard.js"></script>
         <script src="draw.js"></script>
+        <style>
+            body {
+                background-color: #f0f0f0;
+            }
+            #full-container {
+                text-align: center;
+                padding: 10px;
+                box-sizing: border-box;
+                margin: auto;
+                max-width: 800px;
+                background-color: white;
+            }
+            #container > canvas {
+                width: 100%;
+            }
+        </style>
     </head>
     <body>
+        <div id="full-container">
+            <input id="sentence" value="this is a test">
+            <button id="submit">Draw</button>
+            <div id="container"></div>
+            <button id="save">Save Image</button>
+        </div>
         <script>
-            const keyboard = new window.Keyboard();
-            const draw = new window.KeyDraw();
-            draw.addWord(keyboard, 'Alex', '#9532a8');
-            draw.addWord(keyboard, 'Loves', '#e84f4f');
-            draw.addWord(keyboard, 'Samantha', '#65bcd4');
-            draw.draw();
-            document.body.appendChild(draw.canvas);
+            const sentence = document.getElementById('sentence');
+            const submit = document.getElementById('submit');
+            const container = document.getElementById('container');
+
+            function drawWords() {
+                const keyboard = new window.Keyboard();
+                const draw = new window.KeyDraw();
+                const words = sentence.value.split(' ');
+                words.forEach((w) => {
+                    let color = '#';
+                    for (let i = 0; i < 3; ++i) {
+                        let num = Math.round(Math.random() * 255);
+                        if (num < 16) {
+                            color += '0';
+                        }
+                        color += num.toString(16);
+                    }
+                    draw.addWord(keyboard, w, color);
+                });
+                draw.draw();
+                container.innerHTML = '';
+                container.appendChild(draw.canvas);
+            }
+
+            submit.addEventListener('click', drawWords);
+            drawWords();
+
+            document.getElementById('save').addEventListener('click', () => {
+                const canvas = document.getElementsByTagName('canvas')[0];
+                canvas.toBlob((blob) => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'keyboard-drawing.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => {
+                        URL.revokeObjectURL(link.href);
+                    }, 100);
+                }, 'image/png');
+            });
         </script>
     </body>
 </html>

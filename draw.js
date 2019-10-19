@@ -2,13 +2,15 @@
 
     const WIDTH = 371;
     const HEIGHT = 95;
-    const SCALE = 3;
+    const SCALE = 4;
 
     const THICKNESS = 5;
     const ALPHA = 0.75;
 
     const CORNER_CUTS = 5;
     const CORNER_SIZE = 0.25;
+
+    const BACKGROUND = '#ffffff';
 
     class KeyDraw {
         constructor() {
@@ -47,6 +49,9 @@
         draw() {
             const ctx = this.canvas.getContext('2d');
             ctx.clearRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+
+            ctx.fillStyle = BACKGROUND;
+            ctx.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 
             this.paths.forEach((path, i) => {
                 const color = this.colors[i];
